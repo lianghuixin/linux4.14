@@ -85,26 +85,69 @@
 	leds {
 		compatible = "gpio-leds";
 		pinctrl-names = "default";
-		pinctrl-0 = <&leds_r_npi>;
+		pinctrl-0 = <&leds_r_npi>,<&leds_dub_led>;
 
 		pwr {
 			label = "nanopi:green:pwr";
 			gpios = <&r_pio 0 10 GPIO_ACTIVE_HIGH>;
 			default-state = "on";
 		};
+
+	        ledred1 {
+        	        label = "ledred1";
+	                gpios = <&pio 0 15 GPIO_ACTIVE_LOW>;
+			// linux,default-trigger = "timer";
+	                default-state = "on";
+	        };
+
+	        ledgre1 {
+	                label = "ledgre1";
+        	        gpios = <&pio 0 16 GPIO_ACTIVE_LOW>;
+                	default-state = "off";
+	        };
+
+        	ledred2 {
+                	label = "ledred2";
+                	gpios = <&pio 0 17 GPIO_ACTIVE_LOW>;
+                	default-state = "off";
+		};
+
+	        ledgre2 {
+        	        label = "ledgre2";
+                	gpios = <&pio 0 18 GPIO_ACTIVE_LOW>;
+	                default-state = "off";
+	        };
+
+        	ledred3 {
+                	label = "ledred3";
+                	gpios = <&pio 0 19 GPIO_ACTIVE_LOW>;
+                	default-state = "off";
+	        };
+
+        	ledgre3 {
+                	label = "ledgre3";
+                	gpios = <&pio 0 20 GPIO_ACTIVE_LOW>;
+                	default-state = "off";
+	        };
 	};
 
 	r_gpio_keys {
 		compatible = "gpio-keys";
-		input-name = "k1";
 		pinctrl-names = "default";
 		pinctrl-0 = <&sw_r_npi>;
 
-		k1 {
+		k1 {                 /* PL3  BUTTON*/
 			label = "k1";
-			linux,code = <KEY_POWER>;
+			linux,code = <BTN_1>;
 			gpios = <&r_pio 0 3 GPIO_ACTIVE_LOW>;
 		};
+
+                k2 {                 /* PL11  POWER DET */
+                        label = "k2";
+                        linux,code = <BTN_0>;
+                        gpios = <&r_pio 0 11 GPIO_ACTIVE_LOW>;
+                };
+
 	};
 
 	vdd_cpux: gpio-regulator {
@@ -243,15 +286,23 @@
 	};
 
 	sw_r_npi: key_pins {
-		pins = "PL3";
+		pins = "PL3","PL11";
 		function = "gpio_in";
 	};
+
 	vdd_cpux_r_npi: regulator_pins@0 {
 		allwinner,pins = "PL6";
 		allwinner,function = "gpio_out";
 		allwinner,drive = <SUN4I_PINCTRL_10_MA>;
 		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
 	};
+};
+
+&pio {
+    leds_dub_led: leds_dub_led_pin {
+        pins = "PA15","PA16","PA17","PA18","PA19","PA20";
+        function = "gpio_out";
+    };
 };
 
 &uart0 {
